@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="uz" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Manager Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <!-- CodeMirror -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2 id="sidebar-title"><i class="fa-solid fa-folder-tree"></i> Files</h2>
+                <div class="controls">
+                    <select id="lang-select" onchange="changeLanguage()">
+                        <option value="uz">UZ</option>
+                        <option value="ru">RU</option>
+                        <option value="en">EN</option>
+                    </select>
+                    <button id="theme-toggle" onclick="toggleTheme()" title="Toggle Theme">
+                        <i class="fa-solid fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search..." oninput="filterFiles(this.value)">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </div>
+            
+            <div class="sidebar-actions">
+                <button class="btn btn-outline" id="btn-refresh" onclick="loadRootFolder()">
+                    <i class="fa-solid fa-rotate-right"></i>
+                </button>
+                <button class="btn btn-primary" id="btn-create-folder" onclick="promptCreateFolder()">
+                    <i class="fa-solid fa-folder-plus"></i> <span id="text-new-folder">New Folder</span>
+                </button>
+            </div>
+
+            <div id="file-list" class="list-container">
+                <!-- Folders and Files will be injected here dynamically -->
+                <div class="loading" id="loading-indicator">Loading...</div>
+            </div>
+        </aside>
+
+        <!-- Main Editor Area -->
+        <main class="editor-area">
+            <div class="editor-topbar">
+                <div class="path-container">
+                    <i class="fa-regular fa-hard-drive"></i>
+                    <input type="text" id="current-path" placeholder="Path..." readonly>
+                </div>
+                <div class="editor-actions">
+                    <input type="file" id="file-upload" multiple style="display: none" onchange="handleFileUpload(event)">
+                    <button class="btn btn-outline" id="btn-upload" onclick="document.getElementById('file-upload').click()">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> <span id="text-upload">Upload</span>
+                    </button>
+                    <button class="btn btn-success" id="btn-save" onclick="updateFile()">
+                        <i class="fa-solid fa-floppy-disk"></i> <span id="text-save">Save Changes</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="editor-wrapper" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                <div id="drop-overlay" class="hidden">
+                    <i class="fa-solid fa-cloud-arrow-down"></i>
+                    <p>Fayllarni shu yerga tashlang</p>
+                </div>
+                
+                <div id="media-container" class="hidden">
+                    <img id="media-img" src="" alt="Image preview" class="hidden">
+                    <video id="media-video" controls class="hidden"></video>
+                </div>
+
+                <div id="code-container">
+                    <textarea id="text-editor"></textarea>
+                </div>
+
+                <div class="editor-overlay" id="editor-overlay">
+                    <i class="fa-regular fa-file-code"></i>
+                    <p id="text-empty-state">Please select a file from the sidebar to open the editor.</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- CodeMirror Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"></script>
+    
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
